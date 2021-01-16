@@ -1,0 +1,50 @@
+body {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  position: absolute;
+  height: 900px;
+  width: 1600px;
+  border: 5px solid #ccc;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.game-arae {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+.game-arae {
+  background-image: repeating-linear-gradient(#ccc 0 1px, transparent 1px 100%),
+    repeating-linear-gradient(90deg, #ccc 0 1px, transparent 1px 100%);
+  background-size: 10px 10px;
+}
+
+.game-arae:focus {
+  outline: none;
+}
+
+.snake-body {
+  width: 20px;
+  height: 20px;
+  /* top: 200px; */
+  /* left: 200px; */
+  position: absolute;
+  background-color: darkgrey;
+}
+
+.snake-body.header {
+  width: 20px;
+  height: 20px;
+  top: 200px;
+  left: 200px;
+  position: absolute;
+  background-color: black;
+  border-top-right-radius: 20px 120%;
+  border-bottom-right-radius: 20px 120%;
+}
