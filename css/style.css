@@ -13,19 +13,19 @@ body {
   transform: translateY(-50%);
 }
 
-.game-arae {
+.game-area {
   height: 100%;
   width: 100%;
   margin: 0;
 }
 
-.game-arae {
+.game-area {
   background-image: repeating-linear-gradient(#ccc 0 1px, transparent 1px 100%),
     repeating-linear-gradient(90deg, #ccc 0 1px, transparent 1px 100%);
   background-size: 10px 10px;
 }
 
-.game-arae:focus {
+.game-area:focus {
   outline: none;
 }
 
@@ -36,15 +36,12 @@ body {
   /* left: 200px; */
   position: absolute;
   background-color: darkgrey;
+  transition: linear;
 }
 
-.snake-body.header {
-  width: 20px;
-  height: 20px;
-  top: 200px;
-  left: 200px;
+/* .snake-body.header {
   position: absolute;
   background-color: black;
   border-top-right-radius: 20px 120%;
   border-bottom-right-radius: 20px 120%;
-}
+} */
