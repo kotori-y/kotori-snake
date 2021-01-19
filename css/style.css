@@ -37,11 +37,12 @@ body {
   position: absolute;
   background-color: darkgrey;
   transition: linear;
+  border: 1px solid #fff;
 }
 
-/* .snake-body.header {
+.snake-body.header {
   position: absolute;
-  background-color: black;
-  border-top-right-radius: 20px 120%;
-  border-bottom-right-radius: 20px 120%;
-} */
+  background-color: rgb(88, 85, 85);
+  /* border-top-right-radius: 20px 120%;
+  border-bottom-right-radius: 20px 120%; */
+}
