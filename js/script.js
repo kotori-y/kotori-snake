@@ -3,7 +3,7 @@
  * @Author: Kotori Y
  * @Date: 2021-01-15 21:42:18
  * @LastEditors: Kotori Y
- * @LastEditTime: 2021-01-19 17:02:35
+ * @LastEditTime: 2021-01-20 19:08:44
  * @FilePath: \kotori-snake\js\script.js
  * @AuthorMail: kotori@cbdd.me
  */
@@ -16,21 +16,22 @@ async function interval(callback, delay) {
   });
 }
 
-// async sleeper(delay)
-
 class Snake {
   #head = null;
   #tail = null;
   #snake = null;
   #width = 20;
   #height = 20;
-  constructor(elem, initX, initY, length) {
+  #initX = null;
+  #initY = null;
+  #areaHeight = null;
+  #areaWidth = null;
+  allowTurn = false;
+  constructor(elem, length, speed) {
     /* {height:20px; width:20px} */
     this.elem = elem;
-    this.initX = initX;
-    this.initY = initY;
     this.length = length;
-    this.speed = 50; // 1s move one grid --> 20px
+    this.speed = speed; // 50ms move one grid --> 20px
     this.status = "sleep"; // ["sleep", "alive", "dead"]
     /* direction
         2
@@ -40,9 +41,15 @@ class Snake {
     */
     this.direction = 6;
 
+    this.#areaWidth = elem.parentElement.clientWidth;
+    this.#areaHeight = elem.parentElement.clientHeight;
+
+    this.#initX = this.#areaWidth / 2 + Math.ceil(length/2) * this.#width;
+    this.#initY = this.#areaHeight - 80;
+
     this.#createHeader();
     for (let idx = 1; idx <= this.length; idx++) {
-      this.addBody(this.initX - this.#width * idx, this.initY);
+      this.addBody(this.#initX - this.#width * idx, this.#initY);
     }
     this.#snake = document.querySelectorAll(".snake-body");
     this.#tail = this.#snake[this.length];
@@ -51,8 +58,8 @@ class Snake {
   #createHeader() {
     var head = document.createElement("div");
     head.classList = "snake-body header";
-    head.style.left = `${this.initX}px`;
-    head.style.top = `${this.initY}px`;
+    head.style.left = `${this.#initX}px`;
+    head.style.top = `${this.#initY}px`;
     this.#head = head;
     this.elem.appendChild(head);
   }
@@ -63,6 +70,33 @@ class Snake {
     body.style.left = `${xPos}px`;
     body.style.top = `${yPos}px`;
     this.elem.appendChild(body);
+  }
+
+  #isColliding(div1, div2) {
+    var d1Offset = { left: div1.offsetLeft, top: div1.offsetTop };
+    var d2Offset = { left: div2.offsetLeft, top: div2.offsetTop };
+
+    var notColliding =
+      d1Offset.left !== d2Offset.left || d1Offset.top !== d2Offset.top;
+
+    return !notColliding;
+  }
+
+  #isBited() {
+    var bodys = document.querySelectorAll(".snake-body:not(.header)");
+    var bited = Array.from(bodys).some((_body) =>
+      this.#isColliding(this.#head, _body)
+    );
+    return bited;
+  }
+
+  #isOverspill() {
+    return !(
+      this.#head.offsetLeft >= 0 &&
+      this.#head.offsetLeft <= this.#areaWidth - this.#width &&
+      this.#head.offsetTop >= 0 &&
+      this.#head.offsetTop <= this.#areaHeight - this.#height
+    );
   }
 
   #move() {
@@ -86,6 +120,8 @@ class Snake {
           break;
       }
 
+      this.allowTurn = true;
+
       this.#head.classList.remove("header");
       this.#tail.classList.add("header");
 
@@ -93,14 +129,23 @@ class Snake {
       this.#tail =
         this.#tail.previousElementSibling || this.#snake[this.length];
 
-      console.log(this.#head.offsetLeft);
+      var oversplill = this.#isOverspill();
+      var bited = this.#isBited();
 
-      this.#head.offsetLeft >= 0 &&
-      this.#head.offsetLeft <= 1580 &&
-      this.#head.offsetTop >= 0 &&
-      this.#head.offsetTop <= 880
-        ? resolve()
-        : clearInterval(id);
+      switch (true) {
+        case !oversplill && !bited:
+          resolve();
+          break;
+        case bited:
+          clearInterval(id);
+          this.status = "dead";
+          this.#head.classList.add("bited");
+          break;
+        default:
+          clearInterval(id);
+          this.status = "dead";
+          break;
+      }
     }, this.speed);
   }
 
@@ -110,9 +155,10 @@ class Snake {
   }
 }
 
+
 class Controller extends Snake {
-  constructor(elem, initX, initY, length) {
-    super(elem, initX, initY, length);
+  constructor(elem, length, speed) {
+    super(elem, length, speed);
 
     this.#startGame();
   }
@@ -131,24 +177,30 @@ class Controller extends Snake {
   }
 
   #turn = (e) => {
-    switch (e.code) {
-      case "ArrowUp":
-        this.direction = this.direction != 8 ? 2 : 8;
-        break;
-      case "ArrowDown":
-        this.direction = this.direction != 8 ? 8 : 2;
-        break;
-      case "ArrowLeft":
-        this.direction = this.direction != 6 ? 4 : 6;
-        break;
-      case "ArrowRight":
-        this.direction = this.direction != 4 ? 6 : 4;
-        break;
-      default:
-        this.direction = this.direction;
+    if (this.allowTurn) {
+      switch (e.code) {
+        case "ArrowUp":
+          this.direction = this.direction != 8 ? 2 : 8;
+          break;
+        case "ArrowDown":
+          this.direction = this.direction != 2 ? 8 : 2;
+          break;
+        case "ArrowLeft":
+          this.direction = this.direction != 6 ? 4 : 6;
+          break;
+        case "ArrowRight":
+          this.direction = this.direction != 4 ? 6 : 4;
+          break;
+        default:
+          this.direction = this.direction;
+      }
+      this.allowTurn = false
     }
   };
 }
 
+
+
+
 elem = document.querySelector(".snake");
-game = new Controller(elem, 600, 800, 30);
+game = new Controller(elem, 30, 100);
