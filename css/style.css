@@ -51,8 +51,17 @@ body {
   animation: blinker 1s linear infinite;
 }
 
+.food {
+  position: absolute;
+  border-radius: 50%;
+  background: darkred;
+  border: 0;
+  /* top: 100px; */
+  /* left: 500px */
+}
+
 @keyframes blinker {
   50% {
-    background-color:  rgb(224, 154, 154);
+    background-color: rgb(224, 154, 154);
   }
 }
