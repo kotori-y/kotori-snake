@@ -3,7 +3,7 @@
  * @Author: Kotori Y
  * @Date: 2021-01-15 21:42:18
  * @LastEditors: Kotori Y
- * @LastEditTime: 2021-01-22 15:28:15
+ * @LastEditTime: 2021-01-22 15:30:15
  * @FilePath: \kotori-snake\js\script.js
  * @AuthorMail: kotori@cbdd.me
  */
@@ -105,9 +105,6 @@ class Snake extends Food {
   }
 
   #isColliding(div1, div2) {
-
-    // var leftJudge = [div1.offsetLeft, div2.offsetLeft].sort((a,b)=>{a-b})
-    // var topJudge = [div1.offsetTop, div2.offsetTop].sort((a,b)=>{a-b})
     var d1Offset = { left: div1.offsetLeft, top: div1.offsetTop };
     var d2Offset = { left: div2.offsetLeft, top: div2.offsetTop };
 
@@ -115,7 +112,6 @@ class Snake extends Food {
       Math.abs(d1Offset.left - d2Offset.left) >= div2.clientWidth ||
       Math.abs(d1Offset.top - d2Offset.top) >=  div2.clientHeight;
 
-    // var notColliding = leftJudge
 
     return !notColliding;
   }
@@ -134,11 +130,10 @@ class Snake extends Food {
       this.#head.offsetLeft <= this.areaWidth - this.#width &&
       this.#head.offsetTop >= 0 &&
       this.#head.offsetTop <= this.areaHeight - this.#height
-    );  
+    );
   }
 
   #isAte() {
-    console.log(this.#head.offsetLeft)
     return this.#isColliding(this.#head, this.foodElem);
   }
 
