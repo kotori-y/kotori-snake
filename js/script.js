@@ -3,7 +3,7 @@
  * @Author: Kotori Y
  * @Date: 2021-01-15 21:42:18
  * @LastEditors: Kotori Y
- * @LastEditTime: 2021-01-31 16:05:55
+ * @LastEditTime: 2021-01-31 16:26:38
  * @FilePath: \kotori-snake\js\script.js
  * @AuthorMail: kotori@cbdd.me
  */
@@ -245,15 +245,19 @@ class Snake extends Food {
     if (this.allowTurn) {
       switch (e.code) {
         case "ArrowUp":
+        case "KeyW":
           this.direction = this.direction != 8 ? 2 : 8;
           break;
         case "ArrowDown":
+        case "KeyS":
           this.direction = this.direction != 2 ? 8 : 2;
           break;
         case "ArrowLeft":
+        case "KeyA":
           this.direction = this.direction != 6 ? 4 : 6;
           break;
         case "ArrowRight":
+        case "KeyD":
           this.direction = this.direction != 4 ? 6 : 4;
           break;
         default:
