@@ -10,18 +10,55 @@ body {
   transform: translateY(-50%);
 }
 
-.game-area {
-  position: relative;
+.game {
   height: 620px;
   width: 1000px;
-  border: 3px solid #ccc;
+  position: relative;
+}
+
+.start,
+.over,
+.game-area {
+  height: 100%;
+  width: 100%;
   margin: 0;
+}
+
+.start,
+.over {
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  font-family: "Fira code";
+  font-size: 23px;
+  z-index: 3;
+  position: absolute;
+  display: table;
+}
+
+.start p,
+.over p {
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+  line-height: 50px;
+}
+
+.start {
+  opacity: 1;
+}
+
+.over {
+  opacity: 0;
 }
 
 .game-area {
   background-image: repeating-linear-gradient(#ccc 0 1px, transparent 1px 100%),
     repeating-linear-gradient(90deg, #ccc 0 1px, transparent 1px 100%);
   background-size: 10px 10px;
+  position: relative;
+  border: 3px solid #ccc;
+  opacity: 0.5;
 }
 
 .game-area:focus {
@@ -42,7 +79,6 @@ body {
 .snake-body.header {
   position: absolute;
   background-color: rgb(88, 85, 85);
-  z-index: 1;
   /* border-top-right-radius: 20px 120%;
   border-bottom-right-radius: 20px 120%; */
 }
@@ -51,11 +87,16 @@ body {
   animation: blinker 1s linear infinite;
 }
 
+.snake {
+  z-index: 1;
+}
+
 .food {
   position: absolute;
   border-radius: 50%;
   background: darkred;
   border: 0;
+  z-index: 1;
   /* top: 100px; */
   /* left: 500px */
 }

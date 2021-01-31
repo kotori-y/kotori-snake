@@ -3,7 +3,7 @@
  * @Author: Kotori Y
  * @Date: 2021-01-15 21:42:18
  * @LastEditors: Kotori Y
- * @LastEditTime: 2021-01-31 11:50:59
+ * @LastEditTime: 2021-01-31 16:05:55
  * @FilePath: \kotori-snake\js\script.js
  * @AuthorMail: kotori@cbdd.me
  */
@@ -45,9 +45,11 @@ class Snake extends Food {
   #initX = null;
   #initY = null;
   allowTurn = false;
-  constructor(foodElem, snakeElem, length, speed) {
+  constructor(foodElem, snakeElem, startElem, overElem, length, speed) {
     super(foodElem);
     this.snakeElem = snakeElem;
+    this.startElem = startElem;
+    this.overElem = overElem;
     this.length = length;
     this.speed = speed; // 50ms move one grid --> 20px
     this.status = "sleep"; // ["sleep", "alive", "dead"]
@@ -67,12 +69,14 @@ class Snake extends Food {
     this.#createHeader();
     for (let idx = 1; idx <= this.length; idx++) {
       var body = this.#createBody(this.#initX - this.#width * idx, this.#initY);
-      this.snakeElem.appendChild(body)
+      this.snakeElem.appendChild(body);
     }
 
     this.#snake = document.querySelectorAll(".snake-body");
     this.#tail = this.#snake[this.length];
     this.#createFood(20, 20, false);
+
+    this.#startGame();
   }
 
   #createHeader() {
@@ -104,6 +108,27 @@ class Snake extends Food {
     body.style.left = `${xPos}px`;
     body.style.top = `${yPos}px`;
     return body;
+  }
+
+  #reset() {
+    this.speed = 100;
+    this.length = 5;
+    this.status = "alive";
+    this.snakeElem.innerHTML = "";
+    this.direction = 6;
+
+    this.#initX = this.areaWidth / 2 + Math.ceil(length / 2) * this.#width;
+    this.#initY = this.areaHeight - 80;
+
+    this.#createHeader();
+    for (let idx = 1; idx <= this.length; idx++) {
+      var body = this.#createBody(this.#initX - this.#width * idx, this.#initY);
+      this.snakeElem.appendChild(body);
+    }
+
+    this.#snake = document.querySelectorAll(".snake-body");
+    this.#tail = this.#snake[this.length];
+    this.#createFood(20, 20, false);
   }
 
   #isColliding(div1, div2) {
@@ -160,10 +185,10 @@ class Snake extends Food {
   }
 
   #grow() {
-    var x=this.#tail.offsetLeft
-    var y=this.#tail.offsetTop
-    var body=this.#createBody(x,y)
-    this.snakeElem.insertBefore(body,this.#tail)
+    var x = this.#tail.offsetLeft;
+    var y = this.#tail.offsetTop;
+    var body = this.#createBody(x, y);
+    this.snakeElem.insertBefore(body, this.#tail);
     this.#snake = document.querySelectorAll(".snake-body");
     this.length++;
   }
@@ -182,7 +207,7 @@ class Snake extends Food {
 
       var ate = this.#isAte();
       if (ate) {
-        this.#grow()
+        this.#grow();
 
         let [width, height, _score] =
           Math.random() <= 0.1 ? [30, 30, 2] : [20, 20, 20];
@@ -207,28 +232,13 @@ class Snake extends Food {
           this.status = "dead";
           break;
       }
-    }, this.speed);
-  }
-}
 
-class Controller extends Snake {
-  constructor(foodElem, snakeElem, length, speed) {
-    super(foodElem, snakeElem, length, speed);
-
-    this.#startGame();
-  }
-
-  #startGame() {
-    var myFunc = (e) => {
-      if (e.key === "Enter") {
-        this.snakeElem.parentNode.focus();
-        this.snakeElem.parentNode.addEventListener("keydown", this.#turn);
-        this.move();
-        document.removeEventListener("keydown", myFunc);
+      if (this.status === "dead") {
+        this.snakeElem.parentNode.style.opacity = 0.5;
+        this.overElem.style.opacity = 1;
+        this.#startGame();
       }
-    };
-
-    document.addEventListener("keydown", myFunc);
+    }, this.speed);
   }
 
   #turn = (e) => {
@@ -252,8 +262,39 @@ class Controller extends Snake {
       this.allowTurn = false;
     }
   };
+
+  #startGame() {
+    var myFunc = (e) => {
+      if (e.key === "Enter") {
+        if (this.status === "dead") {
+          this.#reset();
+        }
+        this.snakeElem.parentNode.focus();
+        this.snakeElem.parentNode.style.opacity = 1;
+        this.startElem.style.opacity = 0;
+        this.overElem.style.opacity = 0;
+        this.snakeElem.parentNode.addEventListener("keydown", this.#turn);
+        document.removeEventListener("keydown", myFunc);
+        this.move();
+      }
+    };
+
+    document.addEventListener("keydown", myFunc);
+  }
 }
+
+// class Controller extends Snake {
+//   constructor(foodElem, snakeElem, startElem, overElem, length, speed) {
+//     super(foodElem, snakeElem, overElem, length, speed);
+//     this.startElem = startElem;
+//     this.overElem = overElem;
+//     this.#startGame();
+//   }
+
+// }
 
 snakeElem = document.querySelector(".snake");
 foodElem = document.querySelector(".food");
-game = new Controller(foodElem, snakeElem, 5, 100);
+startElem = document.querySelector(".start");
+overElem = document.querySelector(".over");
+game = new Snake(foodElem, snakeElem, startElem, overElem, 5, 100);

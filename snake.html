@@ -3,7 +3,7 @@
  * @Author: Kotori Y
  * @Date: 2021-01-15 17:20:33
  * @LastEditors: Kotori Y
- * @LastEditTime: 2021-01-20 19:19:15
+ * @LastEditTime: 2021-01-31 16:03:33
  * @FilePath: \kotori-snake\snake.html
  * @AuthorMail: kotori@cbdd.me
 -->
@@ -12,21 +12,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="css/style.css" />
     <style></style>
     <title>My SNAKE</title>
   </head>
   <body>
     <div class="container">
-      <div class="game-area" tabindex="0">
-        <div class="snake">
-          <!-- <div class="snake-header"></div>
-          <div class="snake-body"></div>
-          <div class="snake-body"></div>
-          <div class="snake-body"></div> -->
+      <div class="game">
+        <div class="start"><p>press ENTER to start</div>
+        <div class="over">
+          <p>GAME OVER<br>press ENTER to restart</p>
+          <p></p>
         </div>
-        <div class="food">
+        <div class="game-area" tabindex="0">
+          <div class="snake">
+            <!-- <div class="snake-header"></div>
+              <div class="snake-body"></div>
+              <div class="snake-body"></div>
+              <div class="snake-body"></div> -->
+          </div>
+          <div class="food">
             <!-- food here -->
+          </div>
         </div>
       </div>
     </div>
