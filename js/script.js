@@ -3,7 +3,7 @@
  * @Author: Kotori Y
  * @Date: 2021-01-15 21:42:18
  * @LastEditors: Kotori Y
- * @LastEditTime: 2021-01-31 11:44:56
+ * @LastEditTime: 2021-01-31 11:50:59
  * @FilePath: \kotori-snake\js\script.js
  * @AuthorMail: kotori@cbdd.me
  */
@@ -185,7 +185,7 @@ class Snake extends Food {
         this.#grow()
 
         let [width, height, _score] =
-          Math.random() <= 0.03 ? [30, 30, 2] : [20, 20, 20];
+          Math.random() <= 0.1 ? [30, 30, 2] : [20, 20, 20];
         this.eatNum++;
         this.score += _score;
         this.#createFood(width, height, true);
